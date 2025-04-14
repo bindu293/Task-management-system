@@ -1,0 +1,52 @@
+pipeline {
+    agent any  // This tells Jenkins to run the pipeline on any available machine or node
+
+    stages {  // Each "stage" represents a step in your CI/CD pipeline
+        stage('Checkout') {  // Stage 1: Checkout the code from GitHub
+            steps {
+                git 'https://github.com/your-username/your-repository.git'  // URL to your GitHub repository
+            }
+        }
+
+        stage('Build') {  // Stage 2: Build the application
+            steps {
+                script {
+                    // If it's a React project, you might need to run npm install
+                    // If it's a Spring Boot project, you can use Maven to build
+                    sh 'npm install'  // For a React app: Install dependencies
+                    sh 'npm run build'  // For a React app: Build the React app
+                    sh './mvnw clean package -DskipTests'  // For Spring Boot app: Build the backend
+                }
+            }
+        }
+
+        stage('Test') {  // Stage 3: Run tests (optional)
+            steps {
+                script {
+                    // Run tests here if needed (e.g., for React or Spring Boot tests)
+                    sh 'npm test'  // Run React tests (if you have any)
+                    sh './mvnw test'  // Run Spring Boot tests (if you have any)
+                }
+            }
+        }
+
+        stage('Deploy') {  // Stage 4: Deploy the application (optional)
+            steps {
+                script {
+                    // You can deploy your app here, for example, to a server or Docker container
+                    sh 'docker build -t my-app .'  // Build Docker image (optional)
+                    sh 'docker run -d -p 8080:8080 my-app'  // Run Docker container (optional)
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build and deployment completed successfully!'  // Show success message
+        }
+        failure {
+            echo 'Build or deployment failed!'  // Show failure message
+        }
+    }
+}
