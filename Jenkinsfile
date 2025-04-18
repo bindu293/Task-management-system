@@ -4,20 +4,8 @@ pipeline {
         IMAGE_NAME = 'task-management-system'
         CONTAINER_NAME = 'task-management-container'
     }
-    pipeline {
-    agent any
-    stages {
-        stage('Test Docker') {
-            steps {
-                echo 'Checking Docker version...'
-                sh 'docker --version'
-            }
-        }
-    }
-}
 
-
-    stages {
+stages {
         stage('Checkout') {
             steps {
                 echo 'Checking out the code...'
