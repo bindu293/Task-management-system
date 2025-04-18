@@ -5,28 +5,28 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project with Maven...'
-                bat 'mvn clean install'
+                bat '"C:\\Windows\\System32\\cmd.exe" /c mvn clean install'
             }
         }
         
         stage('Test') {
             steps {
                 echo 'Running tests...'
-                bat 'mvn test'
+                bat '"C:\\Windows\\System32\\cmd.exe" /c mvn test'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker image...'
-                bat 'docker build -t task-management-system .'
+                bat '"C:\\Windows\\System32\\cmd.exe" /c docker build -t task-management-system .'
             }
         }
 
         stage('Run Docker Container') {
             steps {
                 echo 'Running Docker container...'
-                bat 'docker run -d -p 9090:9090 task-management-system'
+                bat '"C:\\Windows\\System32\\cmd.exe" /c docker run -d -p 9090:9090 task-management-system'
             }
         }
     }
