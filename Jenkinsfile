@@ -2,76 +2,60 @@ pipeline {
     agent any
 
     environment {
-        // Add Git executable path to the PATH environment variable
-        PATH = "/mingw64/bin:${env.PATH}"
+        // Define any environment variables here
     }
 
     stages {
-        // Stage to check if Git is working correctly
+        stage('Checkout') {
+            steps {
+                echo 'Checking out repository...'
+                git 'https://github.com/bindu293/Task-management-system.git'
+            }
+        }
+        
         stage('Test Git') {
             steps {
                 echo 'Checking Git version...'
-                // This will run the git version command to verify Git is installed
-                sh 'git --version'
+                bat 'git --version'  // Replaced 'sh' with 'bat' for Windows
             }
         }
 
-        // Stage to checkout code from Git
-        stage('Checkout') {
-            steps {
-                echo 'Cloning the Git repository...'
-                checkout scm  // Jenkins automatically checks out the code from the repository
-            }
-        }
-
-        // Frontend build stage (if applicable)
         stage('Frontend Build') {
             steps {
-                dir('frontend') {
-                    echo 'Running frontend build...'
-                    // For example, npm build or any frontend-related commands
-                    sh 'npm install' // Use your specific build commands
-                }
+                echo 'Building Frontend...'
+                bat 'npm install && npm run build'  // Example for Frontend build
             }
         }
 
-        // Backend build stage (if applicable)
         stage('Backend Build') {
             steps {
-                dir('backend') {
-                    echo 'Running backend build...'
-                    // Run backend build commands (for example, mvn clean install for Maven projects)
-                    sh './mvnw clean install' // Or use your specific backend commands
-                }
+                echo 'Building Backend...'
+                bat 'mvn clean install'  // Example for Backend build using Maven
             }
         }
 
-        // Test stage (if applicable)
         stage('Test') {
             steps {
-                echo 'Running tests...'
-                // For example, run your unit tests or integration tests here
-                sh './mvnw test' // Or your specific test command
+                echo 'Running Tests...'
+                bat 'npm test'  // Replace with your specific test command
             }
         }
 
-        // Deployment stage (if applicable)
         stage('Deploy') {
             steps {
                 echo 'Deploying application...'
-                // Add your deployment commands (e.g., pushing to a server, Docker, etc.)
-                // Example: sh './deploy.sh'
+                // Example deploy command, replace with actual deployment steps
+                bat 'deploy-scripts/deploy.bat'
             }
         }
-
     }
 
     post {
         always {
-            echo 'This will run after all stages (whether success or failure)'
+            echo 'This will run after all stages, regardless of success or failure.'
         }
         success {
-            echo 'Build successful!'
+            echo 'Build was successful!'
         }
         failure {
             echo 'Build failed!'
