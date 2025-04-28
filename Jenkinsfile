@@ -1,42 +1,53 @@
 pipeline {
-    agent any  // This means Jenkins can run this pipeline on any available machine
+    agent any
 
     stages {
         stage('Checkout') {
             steps {
-                // This step will pull the latest code from GitHub
                 git url: 'https://github.com/bindu293/Task-management-system.git', branch: 'main'
             }
         }
 
         stage('Build Docker Containers') {
             steps {
-                // These commands will stop and rebuild the Docker containers
                 script {
-                    sh 'docker-compose down'          // Stops any running containers
-                    sh 'docker-compose up --build -d' // Rebuilds and starts the containers in detached mode
+                    bat 'docker-compose down'
+                    bat 'docker-compose up --build -d'
                 }
             }
         }
 
         stage('Test') {
             steps {
-                // Add any testing steps here (if needed)
                 echo 'Running tests...'
             }
         }
 
         stage('Deploy') {
             steps {
-                // Add deployment steps here (if needed)
                 echo 'Deploying app...'
+            }
+        }
+
+        stage('Push Changes to Git') {
+            steps {
+                script {
+                    bat 'git config --global user.email "gorlebindusree@gmail.com"'
+                    bat 'git config --global user.name "bindu293"'
+
+                    bat 'git add .'
+                    bat 'git commit -m "Automated commit from Jenkins pipeline" || echo "No changes to commit"'
+
+                    withCredentials([usernamePassword(credentialsId: 'GitHub-Token', usernameVariable: 'USERNAME', passwordVariable: 'TOKEN')]) {
+                        bat 'git push https://%USERNAME%:%TOKEN%@github.com/bindu293/Task-management-system.git main'
+                    }
+                }
             }
         }
     }
 
     post {
         always {
-            // This block will run after the pipeline finishes, regardless of success or failure
             echo 'Pipeline completed!'
         }
     }
