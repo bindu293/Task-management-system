@@ -1,16 +1,14 @@
 import axios from "axios";
 import { getBasicAuth } from "./AuthApiService";
 
-const API_BASE_URL = 'http://localhost:9090/api/v1/tasks';
+const API_BASE_URL = "http://backend:9090/api/v1/tasks";
 
 axios.interceptors.response.use(
   response => response,
   error => {
-
     console.error('API request error:', error);
     return Promise.reject(error);
   }
-  
 );
 
 export const retrieveAllTasks = (userId) =>

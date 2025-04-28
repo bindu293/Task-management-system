@@ -4,13 +4,15 @@ import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaTasks } from "react-icons/fa";
 
-const AddTaskComponent = ({ userId }) => {
+const AddTaskComponent = () => {
+    const userId = localStorage.getItem("userId"); // 👈 New line
     const [task, setTask] = useState("");
     const [completed, setCompleted] = useState(false);
-    const taskCreatedAt = new Date().toISOString(); // Convert to ISO string
+    const taskCreatedAt = new Date().toISOString();
     const { id } = useParams();
     const navigate = useNavigate();
     const [errors, setErrors] = useState({ task: "" });
+
 
     useEffect(() => {
       if (id) {

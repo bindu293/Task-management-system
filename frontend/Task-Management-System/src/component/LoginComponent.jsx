@@ -24,6 +24,7 @@ const LoginComponent = () => {
           const role = response.data.role;
           storeBasicAuth(basicAuth);
           saveLoggedUser(response.data.id, username, role);
+          localStorage.setItem("userId", response.data.id); // ✅ Save userId here
           navigate(`/tasks`);
         })
         .catch((error) => console.error(error));
@@ -32,7 +33,6 @@ const LoginComponent = () => {
 
   function validateForm() {
     let valid = true;
-
     const errorsCopy = { ...errors };
 
     if (!username.trim()) {
@@ -68,9 +68,7 @@ const LoginComponent = () => {
                   <input
                     type="text"
                     name="username"
-                    className={`form-control ${
-                      errors.username ? "is-invalid" : ""
-                    }`}
+                    className={`form-control ${errors.username ? "is-invalid" : ""}`}
                     placeholder="Username"
                     value={username}
                     onChange={(event) => setUsername(event.target.value)}
@@ -83,9 +81,7 @@ const LoginComponent = () => {
                   <input
                     type="password"
                     name="password"
-                    className={`form-control ${
-                      errors.password ? "is-invalid" : ""
-                    }`}
+                    className={`form-control ${errors.password ? "is-invalid" : ""}`}
                     placeholder="Password"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
