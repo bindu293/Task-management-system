@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // This step will pull the latest code from GitHub
-                git url: 'https://github.com/your-username/taskmanagement-project.git', branch: 'main'
+                git url: 'https://github.com/bindu293/Task-management-system.git', branch: 'main'
             }
         }
 
