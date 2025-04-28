@@ -6,14 +6,17 @@ pipeline {
     stages {
         stage('Declarative: Checkout SCM') {
             steps {
-                checkout scm  // This will pull the latest code from the repository
+                checkout scm  // Pull the latest code from the repository
             }
         }
 
         stage('Build Docker Containers') {
             steps {
-                // This checks if cmd is working by running a simple command
-                bat 'echo Hello from Jenkins!'  // Modify with actual build commands later
+                script {
+                    // Stop any running containers and rebuild them
+                    bat 'docker-compose down'  // Stops running containers
+                    bat 'docker-compose up --build -d'  // Builds and starts containers in detached mode
+                }
             }
         }
 
@@ -21,6 +24,10 @@ pipeline {
             steps {
                 echo 'Running tests...'
                 // Add your test commands here
+                // For example, if you have a test script, you could run:
+                // bat 'npm test'  // For Node.js tests (if using a JavaScript stack)
+                // bat 'mvn test'  // For Java Maven tests
+                // bat 'pytest'  // For Python tests
             }
         }
 
@@ -28,13 +35,21 @@ pipeline {
             steps {
                 echo 'Deploying application...'
                 // Add your deploy commands here
+                // For example, you could:
+                // bat 'docker-compose exec <container_name> ./deploy.sh'  // Run deployment script inside container
+                // Or run other deploy commands based on your stack
             }
         }
 
         stage('Push Changes to Git') {
             steps {
                 echo 'Pushing changes back to Git...'
-                // Add commands for pushing changes to Git if needed
+                script {
+                    // You can push back changes to your repository if needed
+                    bat 'git add .'
+                    bat 'git commit -m "Automated changes from Jenkins"'
+                    bat 'git push origin main'  // Adjust the branch name if needed
+                }
             }
         }
 
