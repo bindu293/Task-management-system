@@ -26,3 +26,28 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running tests...'
+                // Add your test commands here
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying application...'
+                // Add your deploy commands here
+            }
+        }
+
+        stage('Push Changes to Git') {
+            steps {
+                echo 'Pushing changes back to Git...'
+                // Add commands for pushing changes to Git if needed
+            }
+        }
+
+        stage('Declarative: Post Actions') {
+            steps {
+                echo 'Pipeline completed!'
+            }
+        }
+    }
+}
