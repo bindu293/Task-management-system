@@ -6,13 +6,7 @@ pipeline {
     stages {
         stage('Declarative: Checkout SCM') {
             steps {
-                checkout scm
-            }
-        }
-
-        stage('Checkout') {
-            steps {
-                git credentialsId: '450afa69-fc6f-427a-b984-3dd6e9ba654d', url: 'https://github.com/bindu293/Task-management-system.git'
+                checkout scm  // This will pull the latest code from the repository
             }
         }
 
