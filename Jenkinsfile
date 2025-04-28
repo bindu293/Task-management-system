@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        PATH = "${env.PATH};C:\\Windows\\System32"  // Ensure Jenkins can find cmd
+        PATH = "${env.PATH};C:\\Program Files\\Docker\\Docker\\resources\\bin"  // Ensure Docker Compose is in PATH
     }
     stages {
         stage('Declarative: Checkout SCM') {
@@ -10,12 +10,19 @@ pipeline {
             }
         }
 
+        stage('Check Docker Compose Version') {
+            steps {
+                bat 'docker --version'
+                bat 'docker-compose --version'  // Or 'docker compose --version' for v2.x
+            }
+        }
+
         stage('Build Docker Containers') {
             steps {
                 script {
                     // Stop any running containers and rebuild them
-                    bat 'docker compose down'  // Stops running containers
-                    bat 'docker compose up --build -d'  // Builds and starts containers in detached mode
+                    bat 'docker compose down --remove-orphans'  // Stops running containers and removes orphans
+                    bat 'docker compose up --build -d --timeout 600'  // Build and start containers with longer timeout
                 }
             }
         }
@@ -24,10 +31,6 @@ pipeline {
             steps {
                 echo 'Running tests...'
                 // Add your test commands here
-                // For example, if you have a test script, you could run:
-                // bat 'npm test'  // For Node.js tests (if using a JavaScript stack)
-                // bat 'mvn test'  // For Java Maven tests
-                // bat 'pytest'  // For Python tests
             }
         }
 
@@ -35,9 +38,6 @@ pipeline {
             steps {
                 echo 'Deploying application...'
                 // Add your deploy commands here
-                // For example, you could:
-                // bat 'docker-compose exec <container_name> ./deploy.sh'  // Run deployment script inside container
-                // Or run other deploy commands based on your stack
             }
         }
 
@@ -45,7 +45,6 @@ pipeline {
             steps {
                 echo 'Pushing changes back to Git...'
                 script {
-                    // You can push back changes to your repository if needed
                     bat 'git add .'
                     bat 'git commit -m "Automated changes from Jenkins"'
                     bat 'git push origin main'  // Adjust the branch name if needed
