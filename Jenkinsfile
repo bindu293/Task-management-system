@@ -14,8 +14,8 @@ pipeline {
             steps {
                 script {
                     // Stop any running containers and rebuild them
-                    bat 'docker-compose down'  // Stops running containers
-                    bat 'docker-compose up --build -d'  // Builds and starts containers in detached mode
+                    bat 'docker compose down'  // Stops running containers
+                    bat 'docker compose up --build -d'  // Builds and starts containers in detached mode
                 }
             }
         }
