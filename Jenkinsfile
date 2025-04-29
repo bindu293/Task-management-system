@@ -5,11 +5,7 @@ pipeline {
     }
     stages {
 
-        stage('Checkout SCM') {
-            steps {
-                checkout scm
-            }
-        }
+ 
 
         stage('Build Docker Images') {
             steps {
