@@ -1,7 +1,6 @@
 pipeline {
     agent any
     environment {
-        // Add paths for Docker and Git
         PATH = "${env.PATH};C:\\Program Files\\Git\\bin;C:\\Program Files\\Docker\\Docker\\Resources\\bin;C:\\Windows\\System32"
     }
     stages {
@@ -16,7 +15,7 @@ pipeline {
             steps {
                 script {
                     bat '"C:\\Program Files\\Docker\\Docker\\Resources\\bin\\docker-compose.exe" down'
-                    bat '"C:\\Program Files\\Docker\\Docker\\Resources\\bin\\docker-compose.exe" up --build -d'
+                    bat '"C:\\Program Files\\Docker\\Docker\\Resources\\bin\\docker-compose.exe" build'
                 }
             }
         }
@@ -24,14 +23,14 @@ pipeline {
         stage('Run Tests') {
             steps {
                 echo 'Running tests...'
-                // Insert test commands if needed
+                // Add bat/mvn/npm commands here if needed
             }
         }
 
         stage('Deploy') {
             steps {
                 echo 'Deploying application...'
-                // Insert deployment steps if needed
+                bat '"C:\\Program Files\\Docker\\Docker\\Resources\\bin\\docker-compose.exe" up -d'
             }
         }
 
@@ -42,7 +41,7 @@ pipeline {
                         // Login to DockerHub
                         bat "\"C:\\Program Files\\Docker\\Docker\\Resources\\bin\\docker.exe\" login -u %DOCKER_USER% -p %DOCKER_PASS%"
 
-                        // Push images
+                        // Push images to DockerHub (use the same tags as in docker-compose.yml)
                         bat "\"C:\\Program Files\\Docker\\Docker\\Resources\\bin\\docker.exe\" push %DOCKER_USER%/backend:latest"
                         bat "\"C:\\Program Files\\Docker\\Docker\\Resources\\bin\\docker.exe\" push %DOCKER_USER%/frontend:latest"
                     }

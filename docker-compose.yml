@@ -2,18 +2,20 @@ version: "3.8"
 
 services:
   backend:
+    image: bindu892/backend:latest
     build:
       context: .
-      dockerfile: Dockerfile  # This is assuming the backend Dockerfile is in the root directory
+      dockerfile: Dockerfile
     ports:
       - "8082:9090"
     depends_on:
       - mysql
 
   frontend:
+    image: bindu892/frontend:latest
     build:
-      context: ./frontend/Task-Management-System  # Pointing to the correct directory
-      dockerfile: Dockerfile  # Ensure this is the correct path to the Dockerfile
+      context: ./frontend/Task-Management-System
+      dockerfile: Dockerfile
     ports:
       - "3002:80"
     depends_on:
