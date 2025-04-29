@@ -25,10 +25,6 @@ pipeline {
             steps {
                 echo 'Running tests...'
                 // Add your test commands here
-                // For example, if you have a test script, you could run:
-                // bat 'npm test'  // For Node.js tests (if using a JavaScript stack)
-                // bat 'mvn test'  // For Java Maven tests
-                // bat 'pytest'  // For Python tests
             }
         }
 
@@ -36,9 +32,6 @@ pipeline {
             steps {
                 echo 'Deploying application...'
                 // Add your deploy commands here
-                // For example, you could:
-                // bat 'docker-compose exec <container_name> ./deploy.sh'  // Run deployment script inside container
-                // Or run other deploy commands based on your stack
             }
         }
 
@@ -46,7 +39,11 @@ pipeline {
             steps {
                 echo 'Pushing changes back to Git...'
                 script {
-                    // You can push back changes to your repository if needed
+                    // Configure Git user for the current session
+                    bat '"C:\\Program Files\\Git\\bin\\git.exe" config --global user.name "Jenkins CI"'
+                    bat '"C:\\Program Files\\Git\\bin\\git.exe" config --global user.email "jenkins@ci.com"'
+
+                    // Proceed with Git commands
                     bat '"C:\\Program Files\\Git\\bin\\git.exe" add .'
                     bat '"C:\\Program Files\\Git\\bin\\git.exe" commit -m "Automated changes from Jenkins"'
                     bat '"C:\\Program Files\\Git\\bin\\git.exe" push origin main'  // Adjust the branch name if needed
