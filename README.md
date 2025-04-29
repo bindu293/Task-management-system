@@ -5,7 +5,7 @@ This is a comprehensive task management system that empowers users to efficientl
 ## Features 
 ### User Authentication 
 Users can register and log in to access the system securely.
-Authentication ensures that only authorized users can perform operations and can logn and use.
+Authentication ensures that only authorized users can perform operations.
 
 ### Task Operations 
 
