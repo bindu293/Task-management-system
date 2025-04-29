@@ -139,8 +139,8 @@ The Task Management System follows a client-server architecture, with a backend 
 ```json
 
 {
-  "task": "go to swim in the evening",
-  "details": "go to swim in the evening"
+  "task": "go to swim in the afternoon",
+  "details": "go to swim in the afternoon"
 }
 ```
 - Response Body:
