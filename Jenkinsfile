@@ -1,59 +1,58 @@
 pipeline {
     agent any
     environment {
-        // Ensuring paths for necessary tools (Git, Docker) are available to Jenkins
+        // Add paths for Docker and Git
         PATH = "${env.PATH};C:\\Program Files\\Git\\bin;C:\\Program Files\\Docker\\Docker\\Resources\\bin;C:\\Windows\\System32"
     }
     stages {
-        stage('Declarative: Checkout SCM') {
+
+        stage('Checkout SCM') {
             steps {
-                checkout scm  // Pull the latest code from the repository
+                checkout scm
             }
         }
 
-        stage('Build Docker Containers') {
+        stage('Build Docker Images') {
             steps {
                 script {
-                    // Stop any running containers and rebuild them
-                    bat '"C:\\Program Files\\Docker\\Docker\\Resources\\bin\\docker-compose.exe" down'  // Stops running containers
-                    bat '"C:\\Program Files\\Docker\\Docker\\Resources\\bin\\docker-compose.exe" up --build -d'  // Builds and starts containers in detached mode
+                    bat '"C:\\Program Files\\Docker\\Docker\\Resources\\bin\\docker-compose.exe" down'
+                    bat '"C:\\Program Files\\Docker\\Docker\\Resources\\bin\\docker-compose.exe" up --build -d'
                 }
             }
         }
 
-        stage('Test') {
+        stage('Run Tests') {
             steps {
                 echo 'Running tests...'
-                // Add your test commands here
+                // Insert test commands if needed
             }
         }
 
         stage('Deploy') {
             steps {
                 echo 'Deploying application...'
-                // Add your deploy commands here
+                // Insert deployment steps if needed
             }
         }
 
-        stage('Push Changes to Git') {
+        stage('Push Docker Images') {
             steps {
-                echo 'Pushing changes back to Git...'
-                script {
-                    // Configure Git user for the current session
-                    bat '"C:\\Program Files\\Git\\bin\\git.exe" config --global user.name "Jenkins CI"'
-                    bat '"C:\\Program Files\\Git\\bin\\git.exe" config --global user.email "jenkins@ci.com"'
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    script {
+                        // Login to DockerHub
+                        bat "\"C:\\Program Files\\Docker\\Docker\\Resources\\bin\\docker.exe\" login -u %DOCKER_USER% -p %DOCKER_PASS%"
 
-                    // Proceed with Git commands
-                    bat '"C:\\Program Files\\Git\\bin\\git.exe" add .'
-                    bat '"C:\\Program Files\\Git\\bin\\git.exe" commit -m "Automated changes from Jenkins"'
-                    bat '"C:\\Program Files\\Git\\bin\\git.exe" push origin main'  // Adjust the branch name if needed
+                        // Push images
+                        bat "\"C:\\Program Files\\Docker\\Docker\\Resources\\bin\\docker.exe\" push %DOCKER_USER%/backend:latest"
+                        bat "\"C:\\Program Files\\Docker\\Docker\\Resources\\bin\\docker.exe\" push %DOCKER_USER%/frontend:latest"
+                    }
                 }
             }
         }
 
-        stage('Declarative: Post Actions') {
+        stage('Post Actions') {
             steps {
-                echo 'Pipeline completed!'
+                echo 'Pipeline completed successfully!'
             }
         }
     }
