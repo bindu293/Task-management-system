@@ -1,7 +1,8 @@
 pipeline {
     agent any
     environment {
-        PATH = "${env.PATH};C:\\Windows\\System32"  // Ensure Jenkins can find cmd
+        // Ensuring paths for necessary tools (Git, Docker) are available to Jenkins
+        PATH = "${env.PATH};C:\\Program Files\\Git\\bin;C:\\Program Files\\Docker\\Docker\\Resources\\bin;C:\\Windows\\System32"
     }
     stages {
         stage('Declarative: Checkout SCM') {
@@ -14,8 +15,8 @@ pipeline {
             steps {
                 script {
                     // Stop any running containers and rebuild them
-                    bat 'docker compose down'  // Stops running containers
-                    bat 'docker compose up --build -d'  // Builds and starts containers in detached mode
+                    bat '"C:\\Program Files\\Docker\\Docker\\Resources\\bin\\docker-compose.exe" down'  // Stops running containers
+                    bat '"C:\\Program Files\\Docker\\Docker\\Resources\\bin\\docker-compose.exe" up --build -d'  // Builds and starts containers in detached mode
                 }
             }
         }
@@ -46,9 +47,9 @@ pipeline {
                 echo 'Pushing changes back to Git...'
                 script {
                     // You can push back changes to your repository if needed
-                    bat 'git add .'
-                    bat 'git commit -m "Automated changes from Jenkins"'
-                    bat 'git push origin main'  // Adjust the branch name if needed
+                    bat '"C:\\Program Files\\Git\\bin\\git.exe" add .'
+                    bat '"C:\\Program Files\\Git\\bin\\git.exe" commit -m "Automated changes from Jenkins"'
+                    bat '"C:\\Program Files\\Git\\bin\\git.exe" push origin main'  // Adjust the branch name if needed
                 }
             }
         }
