@@ -1,26 +1,33 @@
 # Stage 1: Build the application
 FROM openjdk:17-jdk-slim AS build
 
-# Install Maven
-RUN apt-get update && apt-get install -y maven
+# Install CA certificates and Maven
+RUN apt-get update && \
+    apt-get install -y ca-certificates maven && \
+    update-ca-certificates
 
-# Set working directory inside the container
+# Set working directory
 WORKDIR /app
 
-# Copy all files to the container
+# Copy source code
 COPY . .
 
-# Package the Spring Boot application
+# Build the application
 RUN mvn clean package -DskipTests
 
 # Stage 2: Run the application
 FROM openjdk:17-jdk-slim
 
-# Set working directory inside the container
+# Install CA certificates
+RUN apt-get update && \
+    apt-get install -y ca-certificates && \
+    update-ca-certificates
+
+# Set working directory
 WORKDIR /app
 
-# Copy the built JAR from the build stage
+# Copy built JAR from previous stage
 COPY --from=build /app/target/*.jar app.jar
 
-# Run the application
+# Run the app
 ENTRYPOINT ["java", "-jar", "app.jar"]
