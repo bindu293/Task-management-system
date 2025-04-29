@@ -15,7 +15,7 @@ services:
       context: ./frontend/Task-Management-System  # Pointing to the correct directory
       dockerfile: Dockerfile  # Ensure this is the correct path to the Dockerfile
     ports:
-      - "3000:80"
+      - "3001:80"
     depends_on:
       - backend
 
