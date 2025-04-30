@@ -26,8 +26,5 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: bindu
       MYSQL_DATABASE: task_management
-        ports:
-          - "3307:3306"
-
-    ports:
+  ports:
       - "3307:3306"
