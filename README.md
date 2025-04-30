@@ -18,7 +18,7 @@ Authentication ensures that only authorized users can perform operations.
 
 ## Tech Stack 
 **Client:** React, ViteJS, BootStrap
-**Server:** Java, Spring Boot
+**Server:** Java, Spring Boot,Maven
 **Database:** MySQL
 
 ## Architecture
