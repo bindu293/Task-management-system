@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getBasicAuth } from "./AuthApiService";
 
-const API_BASE_URL = "http://backend:9090/api/v1/tasks";
+const API_BASE_URL = "http://backend:8082/api/v1/tasks";
 
 axios.interceptors.response.use(
   response => response,
