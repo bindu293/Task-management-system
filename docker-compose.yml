@@ -1,6 +1,19 @@
 version: "3.8"
 
 services:
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: bindu
+      MYSQL_DATABASE: task_management
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   backend:
     image: bindu892/backend:latest
     build:
@@ -9,7 +22,8 @@ services:
     ports:
       - "8082:9090"
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
 
   frontend:
     image: bindu892/frontend:latest
@@ -20,11 +34,3 @@ services:
       - "3002:80"
     depends_on:
       - backend
-
-  mysql:
-    image: mysql:5.7
-    environment:
-      MYSQL_ROOT_PASSWORD: bindu
-      MYSQL_DATABASE: task_management
-    ports:
-      - "3307:3306"
