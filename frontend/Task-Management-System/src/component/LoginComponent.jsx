@@ -4,6 +4,9 @@ import { loginApi, saveLoggedUser, storeBasicAuth } from "../service/AuthApiServ
 import { useNavigate } from "react-router-dom";
 import "../css/tasks.css";
 
+// ✅ Import the image
+import loginImage from "../assets/loginPage.jpg";
+
 const LoginComponent = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -24,7 +27,7 @@ const LoginComponent = () => {
           const role = response.data.role;
           storeBasicAuth(basicAuth);
           saveLoggedUser(response.data.id, username, role);
-          localStorage.setItem("userId", response.data.id); // ✅ Save userId here
+          localStorage.setItem("userId", response.data.id);
           navigate(`/tasks`);
         })
         .catch((error) => console.error(error));
@@ -58,7 +61,8 @@ const LoginComponent = () => {
       <Container>
         <Row className="align-items-center">
           <Col md={6} className="text-center">
-            <img src="/src/assets/loginPage.jpg" alt="Login Page" className="img-fluid" />
+            {/* ✅ Use imported image here */}
+            <img src={loginImage} alt="Login Page" className="img-fluid" />
           </Col>
           <Col md={6}>
             <div className="login-form bg-light shadow-lg p-4">
