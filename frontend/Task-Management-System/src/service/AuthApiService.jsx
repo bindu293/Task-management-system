@@ -2,7 +2,9 @@ import axios from "axios";
 
 // Axios client for authentication service
 const authApiClient = axios.create({
-  baseURL: 'http://backend:9090/api/auth',
+  baseURL: '"http://172.18.0.3:9090/api/auth',
+  
+
 });
 
 // Function to combine username and password into a single object for login API
