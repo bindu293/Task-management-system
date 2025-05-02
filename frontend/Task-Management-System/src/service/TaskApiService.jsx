@@ -2,7 +2,8 @@ import axios from "axios";
 import { getBasicAuth } from "./AuthApiService";
 
 // Update the API base URL to the backend service name in Docker
-const API_BASE_URL = "http://backend:9090/api/v1/tasks";  // Update to backend service
+const API_BASE_URL = "http://172.18.0.3:9090/api/v1/tasks";
+// Update to backend service
 
 axios.interceptors.response.use(
   response => response,
