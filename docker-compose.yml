@@ -9,6 +9,7 @@ services:
       MYSQL_DATABASE: task_management
     ports:
       - "3306:3306"
+      command: --bind-address=0.0.0.0
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
